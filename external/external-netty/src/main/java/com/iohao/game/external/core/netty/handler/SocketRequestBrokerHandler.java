@@ -50,6 +50,9 @@ public final class SocketRequestBrokerHandler extends SimpleChannelInboundHandle
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, BarMessage message) {
+
+        log.info(" 【#####】 SocketRequestBrokerHandler channelRead0()");
+
         // 给请求消息加上一些 user 自身的数据
         SocketUserSession userSession = this.userSessions.getUserSession(ctx);
         userSession.employ(message);

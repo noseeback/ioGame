@@ -23,6 +23,7 @@ import com.iohao.game.external.core.message.ExternalMessageCmdCode;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Exclude heartbeat message
@@ -32,9 +33,13 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
  * @since 21.20
  */
 @ChannelHandler.Sharable
+@Slf4j
 public final class SocketIdleExcludeHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
+
+        log.info(" 【#####】 SocketIdleExcludeHandler channelRead()");
+
         BarMessage message = (BarMessage) msg;
 
         int cmdCode = message.getHeadMetadata().getCmdCode();

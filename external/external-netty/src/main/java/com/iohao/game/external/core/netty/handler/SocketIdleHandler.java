@@ -31,6 +31,7 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleStateEvent;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 
@@ -41,6 +42,7 @@ import java.util.Objects;
  * @date 2023-02-18
  */
 @ChannelHandler.Sharable
+@Slf4j
 public final class SocketIdleHandler extends ChannelInboundHandlerAdapter
         implements ExternalCoreSettingAware {
     /** 心跳事件回调 */
@@ -51,6 +53,8 @@ public final class SocketIdleHandler extends ChannelInboundHandlerAdapter
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
+
+        log.info(" 【#####】 SocketIdleHandler channelRead()");
 
         BarMessage message = (BarMessage) msg;
 
@@ -75,6 +79,9 @@ public final class SocketIdleHandler extends ChannelInboundHandlerAdapter
 
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+
+        log.info(" 【#####】 SocketIdleHandler userEventTriggered()");
+
         if (evt instanceof IdleStateEvent event) {
 
             boolean close = true;
@@ -99,6 +106,8 @@ public final class SocketIdleHandler extends ChannelInboundHandlerAdapter
     @Override
     @SuppressWarnings("unchecked")
     public void setExternalCoreSetting(ExternalCoreSetting externalCoreSetting) {
+
+        log.info(" 【#####】 SocketIdleHandler setExternalCoreSetting()");
 
         if (Objects.nonNull(this.userSessions)) {
             return;

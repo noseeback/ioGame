@@ -26,6 +26,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
@@ -35,6 +36,7 @@ import java.util.List;
  * @author 渔民小镇
  * @date 2023-02-21
  */
+@Slf4j
 public class WebSocketExternalCodec extends MessageToMessageCodec<BinaryWebSocketFrame, BarMessage> {
     @Override
     protected void encode(ChannelHandlerContext ctx, BarMessage message, List<Object> out) {
@@ -42,6 +44,7 @@ public class WebSocketExternalCodec extends MessageToMessageCodec<BinaryWebSocke
          * 编码器 - 将消息发送到请求端（客户端）；【游戏对外服】发送消息给【游戏客户端】
          * ResponseMessage ---> ExternalMessage ---> 字节数组
          */
+        log.info(" 【#####】 WebSocketExternalCodec encode()");
         ExternalMessage externalMessage = ExternalCodecKit.convertExternalMessage(message);
 
         byte[] bytes = DataCodecKit.encode(externalMessage);
@@ -60,6 +63,7 @@ public class WebSocketExternalCodec extends MessageToMessageCodec<BinaryWebSocke
          * 解码器 - 接收请求端的消息（客户端）；
          * 字节数组 ---> ExternalMessage ---> RequestMessage
          */
+        log.info(" 【#####】 WebSocketExternalCodec decode()");
         ByteBuf contentBuf = binary.content();
         byte[] bytes = new byte[contentBuf.readableBytes()];
         contentBuf.readBytes(bytes);

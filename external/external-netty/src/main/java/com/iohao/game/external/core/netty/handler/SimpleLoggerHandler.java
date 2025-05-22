@@ -36,11 +36,17 @@ public final class SimpleLoggerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+
+        log.info(" 【#####】 SimpleLoggerHandler channelInactive()");
+
         super.channelInactive(ctx);
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+
+        log.info(" 【#####】 SimpleLoggerHandler exceptionCaught()");
+
         log.error(cause.getMessage(), cause);
         super.exceptionCaught(ctx, cause);
     }

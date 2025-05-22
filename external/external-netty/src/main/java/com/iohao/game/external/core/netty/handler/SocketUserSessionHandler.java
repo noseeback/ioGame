@@ -52,6 +52,9 @@ public final class SocketUserSessionHandler extends ChannelInboundHandlerAdapter
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+
+        log.info(" 【#####】 SocketUserSessionHandler channelActive()");
+
         BrokerClientModuleMessage moduleMessage = brokerClient.getBrokerClientModuleMessage();
         int idHash = moduleMessage.getIdHash();
 
@@ -64,6 +67,9 @@ public final class SocketUserSessionHandler extends ChannelInboundHandlerAdapter
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+
+        log.info(" 【#####】 SocketUserSessionHandler channelInactive()");
+
         // 从 session 管理中移除
         var userSession = this.userSessions.getUserSession(ctx);
         this.userSessions.removeUserSession(userSession);
@@ -73,6 +79,9 @@ public final class SocketUserSessionHandler extends ChannelInboundHandlerAdapter
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+
+        log.info(" 【#####】 SocketUserSessionHandler exceptionCaught()");
+
         // 从 session 管理中移除
         var userSession = this.userSessions.getUserSession(ctx);
         this.userSessions.removeUserSession(userSession);

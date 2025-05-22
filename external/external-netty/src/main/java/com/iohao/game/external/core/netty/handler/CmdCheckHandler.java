@@ -26,6 +26,7 @@ import com.iohao.game.external.core.message.ExternalCodecKit;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 路由是否存在检测
@@ -39,12 +40,16 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * @date 2023-05-01
  */
 @ChannelHandler.Sharable
+@Slf4j
 public final class CmdCheckHandler extends SimpleChannelInboundHandler<BarMessage>
         implements CmdRegionsAware {
     CmdRegions cmdRegions;
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, BarMessage message) {
+
+        log.info(" 【#####】 CmdCheckHandler channelRead0()");
+
         int cmdMerge = message.getHeadMetadata().getCmdMerge();
         // 路由存在
         if (cmdRegions.existCmdMerge(cmdMerge)) {

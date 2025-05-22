@@ -24,6 +24,7 @@ import com.iohao.game.external.core.hook.cache.ExternalCmdCache;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 
@@ -34,10 +35,13 @@ import java.util.Objects;
  * @date 2023-07-02
  */
 @ChannelHandler.Sharable
+@Slf4j
 public final class CmdCacheHandler extends SimpleChannelInboundHandler<BarMessage> {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+
+        log.info(" 【#####】 CmdCacheHandler channelActive()");
 
         ExternalCmdCache externalCmdCache = ExternalGlobalConfig.externalCmdCache;
         if (Objects.isNull(externalCmdCache)) {
@@ -50,6 +54,9 @@ public final class CmdCacheHandler extends SimpleChannelInboundHandler<BarMessag
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, BarMessage message) {
+
+        log.info(" 【#####】 CmdCacheHandler channelRead0()");
+
         ExternalCmdCache externalCmdCache = ExternalGlobalConfig.externalCmdCache;
 
         BarMessage cache = externalCmdCache.getCache(message);

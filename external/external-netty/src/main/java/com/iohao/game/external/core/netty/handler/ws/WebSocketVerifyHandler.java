@@ -26,6 +26,7 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -36,6 +37,8 @@ import java.util.stream.Collectors;
  * @author 渔民小镇
  * @date 2023-08-03
  */
+
+@Slf4j
 public class WebSocketVerifyHandler extends ChannelInboundHandlerAdapter
         implements UserSessionsAware {
 
@@ -48,6 +51,9 @@ public class WebSocketVerifyHandler extends ChannelInboundHandlerAdapter
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+
+        log.info(" 【#####】 WebSocketVerifyHandler channelRead()");
+
         if (msg instanceof FullHttpRequest request) {
             // 从 uri 中解析参数
             String uri = request.uri();
@@ -79,6 +85,8 @@ public class WebSocketVerifyHandler extends ChannelInboundHandlerAdapter
      * @return 返回 false 表示验证没通过，框架会关闭连接
      */
     protected boolean verify(SocketUserSession userSession, Map<String, String> params) {
+
+        log.info(" 【#####】 WebSocketVerifyHandler verify()");
         /*
          * 保存一份验证完成的数据，后续使用。
          * 开发者如果有想把解析后的数据传递到游戏逻辑服中的，

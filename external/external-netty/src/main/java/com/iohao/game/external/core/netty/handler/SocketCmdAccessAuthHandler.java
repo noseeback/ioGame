@@ -30,6 +30,7 @@ import com.iohao.game.external.core.session.UserSessions;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 路由访问权限相关处理
@@ -38,12 +39,16 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * @date 2023-05-05
  */
 @ChannelHandler.Sharable
+@Slf4j
 public class SocketCmdAccessAuthHandler extends SimpleChannelInboundHandler<BarMessage>
         implements UserSessionsAware {
     protected UserSessions<?, ?> userSessions;
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, BarMessage message) {
+
+        log.info(" 【#####】 SocketCmdAccessAuthHandler channelRead0()");
+
         if (reject(ctx, message)) {
             // 拒绝玩家直接访问 action
             return;
@@ -62,6 +67,9 @@ public class SocketCmdAccessAuthHandler extends SimpleChannelInboundHandler<BarM
     }
 
     protected boolean reject(ChannelHandlerContext ctx, BarMessage message) {
+
+        log.info(" 【#####】 SocketCmdAccessAuthHandler reject()");
+
         AccessAuthenticationHook accessAuthenticationHook = ExternalGlobalConfig.accessAuthenticationHook;
         int cmdMerge = message.getHeadMetadata().getCmdMerge();
         boolean reject = accessAuthenticationHook.reject(cmdMerge);
@@ -78,6 +86,9 @@ public class SocketCmdAccessAuthHandler extends SimpleChannelInboundHandler<BarM
     }
 
     protected boolean notPass(ChannelHandlerContext ctx, BarMessage message, boolean loginSuccess) {
+
+        log.info(" 【#####】 SocketCmdAccessAuthHandler notPass()");
+
         // 是否可以访问业务方法（action），true 表示可以访问该路由对应的业务方法
         AccessAuthenticationHook accessAuthenticationHook = ExternalGlobalConfig.accessAuthenticationHook;
         int cmdMerge = message.getHeadMetadata().getCmdMerge();
