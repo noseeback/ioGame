@@ -45,6 +45,7 @@
         <module>widget/light-game-room</module>
         <module>widget/other-tool</module>
         <module>widget/generate-code</module>
+        <module>test/test-app</module>
     </modules>
 
     <!--统一管理版本 的一个父 pom-->
