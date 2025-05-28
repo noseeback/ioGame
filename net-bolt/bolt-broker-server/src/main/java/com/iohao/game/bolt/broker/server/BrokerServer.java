@@ -89,6 +89,7 @@ public class BrokerServer implements GroupWith {
         this.rpcServer = new RpcServer(this.port, true);
     }
 
+    @Deprecated
     public void startup() {
         IoGameBanner.me().init();
 

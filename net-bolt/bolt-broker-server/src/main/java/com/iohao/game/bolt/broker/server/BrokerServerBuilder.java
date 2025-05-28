@@ -62,11 +62,17 @@ import java.util.function.Supplier;
 @Accessors(fluent = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BrokerServerBuilder implements AwareInject {
-    /** broker （游戏网关） */
+    /**
+     * broker （游戏网关）
+     */
     final BrokerServer brokerServer = new BrokerServer();
-    /** 用户处理器 */
+    /**
+     * 用户处理器
+     */
     final List<Supplier<UserProcessor<?>>> processorList = new ArrayList<>();
-    /** bolt 连接器 */
+    /**
+     * bolt 连接器
+     */
     final Map<ConnectionEventType, Supplier<ConnectionEventProcessor>> connectionEventProcessorMap = new NonBlockingHashMap<>();
     final BrokerClientModules brokerClientModules = new DefaultBrokerClientModules();
 
@@ -81,16 +87,24 @@ public class BrokerServerBuilder implements AwareInject {
      */
     @Setter
     String brokerId;
-    /** broker 端口（游戏网关端口） */
+    /**
+     * broker 端口（游戏网关端口）
+     */
     @Setter
     int port = IoGameGlobalConfig.brokerPort;
-    /** broker （游戏网关）的启动模式，默认单机模式 */
+    /**
+     * broker （游戏网关）的启动模式，默认单机模式
+     */
     @Setter
     BrokerRunModeEnum brokerRunMode = BrokerRunModeEnum.STANDALONE;
-    /** 集群的管理 构建器，如果不需要集群，可以不设置 */
+    /**
+     * 集群的管理 构建器，如果不需要集群，可以不设置
+     */
     BrokerClusterManagerBuilder brokerClusterManagerBuilder;
 
-    /** BrokerClientRegion 工厂 */
+    /**
+     * BrokerClientRegion 工厂
+     */
     @Setter
     BrokerClientRegionFactory brokerClientRegionFactory = StrictBrokerClientRegion::new;
 
@@ -107,6 +121,7 @@ public class BrokerServerBuilder implements AwareInject {
      *
      * @return 游戏网关
      */
+    @Deprecated
     public BrokerServer build() {
 
         this.checked();
@@ -155,17 +170,6 @@ public class BrokerServerBuilder implements AwareInject {
         this.cluster();
 
         return brokerServer;
-    }
-
-    /**
-     * 注册用户处理器
-     *
-     * @param processorSupplier processor
-     * @return this
-     */
-    public BrokerServerBuilder registerUserProcessor(Supplier<UserProcessor<?>> processorSupplier) {
-        this.processorList.add(processorSupplier);
-        return this;
     }
 
     /**
@@ -258,17 +262,10 @@ public class BrokerServerBuilder implements AwareInject {
 
     private void defaultProcessor() {
         // ============================注册连接器============================
-
-        Supplier<ConnectionEventProcessor> connectionCloseEventSupplier = ConnectionCloseEventBrokerProcessor::new;
-        Supplier<ConnectionEventProcessor> connectionEventSupplier = ConnectionEventBrokerProcessor::new;
-        Supplier<ConnectionEventProcessor> connectionExceptionEventSupplier = ConnectionExceptionEventBrokerProcessor::new;
-        Supplier<ConnectionEventProcessor> connectionFailedEventSupplier = ConnectionFailedEventBrokerProcessor::new;
-
-        this
-                .addConnectionEventProcessor(ConnectionEventType.EXCEPTION, connectionExceptionEventSupplier)
-                .addConnectionEventProcessor(ConnectionEventType.CONNECT_FAILED, connectionFailedEventSupplier)
-                .addConnectionEventProcessor(ConnectionEventType.CONNECT, connectionEventSupplier)
-                .addConnectionEventProcessor(ConnectionEventType.CLOSE, connectionCloseEventSupplier);
+        this.connectionEventProcessorMap.put(ConnectionEventType.EXCEPTION, ConnectionExceptionEventBrokerProcessor::new);
+        this.connectionEventProcessorMap.put(ConnectionEventType.CONNECT_FAILED, ConnectionFailedEventBrokerProcessor::new);
+        this.connectionEventProcessorMap.put(ConnectionEventType.CONNECT, ConnectionEventBrokerProcessor::new);
+        this.connectionEventProcessorMap.put(ConnectionEventType.CLOSE, ConnectionCloseEventBrokerProcessor::new);
 
         // ============================注册用户处理器============================
 
@@ -304,25 +301,24 @@ public class BrokerServerBuilder implements AwareInject {
 
         Supplier<UserProcessor<?>> brokerClientItemConnectMessageSupplier = BrokerClientItemConnectMessageBrokerProcessor::new;
 
-        this
-                .registerUserProcessor(registerSupplier)
-                .registerUserProcessor(externalMessageSupplier)
-                .registerUserProcessor(changeUserIdMessageSupplier)
-                .registerUserProcessor(responseMessageSupplier)
-                .registerUserProcessor(innerModuleMessageSupplier)
-                .registerUserProcessor(innerModuleVoidMessageSupplier)
-                .registerUserProcessor(innerModuleRequestCollectMessageSupplier)
-                .registerUserProcessor(innerModuleRequestCollectExternalMessageSupplier)
-                .registerUserProcessor(broadcastMessageSupplier)
-                .registerUserProcessor(broadcastOrderMessageSupplier)
-                .registerUserProcessor(brokerClientItemConnectMessageSupplier)
-                .registerUserProcessor(endPointLogicServerMessageSupplier)
-                // 处理 - 接收脉冲生产者-的脉冲信号
-                .registerUserProcessor(PulseSignalRequestBrokerProcessor::new)
-                // 处理 - 接收脉冲消费者-的脉冲信号
-                .registerUserProcessor(PulseSignalResponseBrokerProcessor::new)
-                // 分布式事件总线 broker
-                .registerUserProcessor(EventBusMessageBrokerProcessor::new)
+        this.processorList.add(registerSupplier);
+        this.processorList.add(externalMessageSupplier);
+        this.processorList.add(changeUserIdMessageSupplier);
+        this.processorList.add(responseMessageSupplier);
+        this.processorList.add(innerModuleMessageSupplier);
+        this.processorList.add(innerModuleVoidMessageSupplier);
+        this.processorList.add(innerModuleRequestCollectMessageSupplier);
+        this.processorList.add(innerModuleRequestCollectExternalMessageSupplier);
+        this.processorList.add(broadcastMessageSupplier);
+        this.processorList.add(broadcastOrderMessageSupplier);
+        this.processorList.add(brokerClientItemConnectMessageSupplier);
+        this.processorList.add(endPointLogicServerMessageSupplier);
+        // 处理 - 接收脉冲生产者-的脉冲信号
+        this.processorList.add(PulseSignalRequestBrokerProcessor::new);
+        // 处理 - 接收脉冲消费者-的脉冲信号
+        this.processorList.add(PulseSignalResponseBrokerProcessor::new);
+        // 分布式事件总线 broker
+        this.processorList.add(EventBusMessageBrokerProcessor::new);
         ;
 
         BrokerEnhances.enhance(this);
