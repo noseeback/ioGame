@@ -28,6 +28,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 
@@ -35,6 +36,7 @@ import java.util.Objects;
  * @author 渔民小镇
  * @date 2023-02-19
  */
+@Slf4j
 @Getter
 @Setter
 @Accessors(fluent = true)
@@ -43,13 +45,23 @@ public final class DefaultExternalServerBuilder {
 
     final DefaultExternalCoreSetting setting = new DefaultExternalCoreSetting();
 
-    /** 内部逻辑服 连接网关服务器，与网关通信 */
+    /**
+     * 内部逻辑服 连接网关服务器，与网关通信
+     */
     ExternalBrokerClientStartup externalBrokerClientStartup = new ExternalBrokerClientStartup();
 
-    /** 设置 broker （游戏网关）连接地址 */
+    /**
+     * 设置 broker （游戏网关）连接地址
+     */
     BrokerAddress brokerAddress;
 
+    public DefaultExternalServerBuilder brokerAddress(BrokerAddress brokerAddress) {
+        this.brokerAddress = brokerAddress;
+        return this;
+    }
+
     DefaultExternalServerBuilder(int externalCorePort) {
+        log.info("111 设置端口为: {}", externalCorePort);
         this.setting.setExternalCorePort(externalCorePort);
     }
 
@@ -60,16 +72,22 @@ public final class DefaultExternalServerBuilder {
      * @return this
      */
     public DefaultExternalServerBuilder externalJoinEnum(ExternalJoinEnum joinEnum) {
+        log.info("111 设置连接方式为: {}", joinEnum);
         this.setting.setExternalJoinEnum(joinEnum);
         return this;
     }
 
     public ExternalServer build() {
+        log.info("111 开始build ExternalServer");
+
+        log.info("111 开始校验参数");
         this.check();
 
         // 与真实玩家通信的 netty 服务器
+        log.info("111 构建netty服务器");
         ExternalCore externalCore = new DefaultExternalCore(this.setting);
 
+        log.info("构建对外服对象");
         // 游戏对外服
         return new DefaultExternalServer(
                 this.setting,
@@ -80,6 +98,7 @@ public final class DefaultExternalServerBuilder {
     }
 
     private void check() {
+        log.info("111 校验与网关通信的客户端");
         Objects.requireNonNull(this.externalBrokerClientStartup);
     }
 

@@ -28,6 +28,7 @@ import com.iohao.game.external.core.broker.client.ExternalBrokerClientStartup;
 import com.iohao.game.external.core.micro.MicroBootstrap;
 import com.iohao.game.external.core.micro.join.ExternalJoinSelector;
 import com.iohao.game.external.core.micro.join.ExternalJoinSelectors;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Objects;
 import java.util.ServiceLoader;
@@ -42,15 +43,24 @@ import java.util.ServiceLoader;
  * @author 渔民小镇
  * @date 2023-02-19
  */
+@Slf4j
 public final class DefaultExternalServer implements ExternalServer, GroupWith {
-    /** 与真实玩家连接的 ExternalCore 服务器 */
+    /**
+     * 与真实玩家连接的 ExternalCore 服务器
+     */
     ExternalCore externalCore;
-    /** ExternalCore 的一些设置 */
+    /**
+     * ExternalCore 的一些设置
+     */
     DefaultExternalCoreSetting setting;
 
-    /** 与 Broker（游戏网关）通信的 BrokerClient */
+    /**
+     * 与 Broker（游戏网关）通信的 BrokerClient
+     */
     ExternalBrokerClientStartup externalBrokerClientStartup;
-    /** 连接 broker （游戏网关） 的地址 */
+    /**
+     * 连接 broker （游戏网关） 的地址
+     */
     BrokerAddress brokerAddress;
     int withNo;
 
@@ -71,12 +81,15 @@ public final class DefaultExternalServer implements ExternalServer, GroupWith {
 
     @Override
     public void startup() {
+        log.info("111 对外服开始启动");
         // 创建与真实玩家通信的 netty 服务器
         MicroBootstrap microBootstrap = this.externalCore.createMicroBootstrap();
 
+        log.info("111 启动与网关通信的客户端");
         var startExternalBrokerClient = System.getProperty("ExternalBrokerClientStartup", "true");
         if (Boolean.parseBoolean(startExternalBrokerClient)) {
             // 启动与 Broker 游戏网关通信的 BrokerClient
+            log.info("111 启动与 Broker 游戏网关通信的 BrokerClient");
             startExternalBrokerClient();
         }
 
@@ -107,6 +120,7 @@ public final class DefaultExternalServer implements ExternalServer, GroupWith {
     }
 
     public static DefaultExternalServerBuilder newBuilder(int externalCorePort) {
+        log.info("111 生成一个builder");
         return new DefaultExternalServerBuilder(externalCorePort);
     }
 

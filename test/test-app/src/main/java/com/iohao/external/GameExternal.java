@@ -32,17 +32,18 @@ import com.iohao.game.external.core.netty.DefaultExternalServerBuilder;
 public class GameExternal {
     public static void main(String[] args) {
         int externalPort = 10100;
-        ExternalServer externalServerWebSocket = new GameExternal().createExternalServer(externalPort, ExternalJoinEnum.WEBSOCKET);
+        DefaultExternalServer
+                .newBuilder(externalPort)
+                .externalJoinEnum(ExternalJoinEnum.WEBSOCKET)
+                .brokerAddress(new BrokerAddress("127.0.0.1", IoGameGlobalConfig.brokerPort))
+                .build()
+                .startup();
 
-
-        externalServerWebSocket.startup();
     }
 
     public ExternalServer createExternalServer(int externalPort, ExternalJoinEnum joinEnum) {
         extractedIgnore();
-        DefaultExternalServerBuilder builder = DefaultExternalServer.newBuilder(externalPort)
-                .externalJoinEnum(joinEnum)
-                .brokerAddress(new BrokerAddress("127.0.0.1", IoGameGlobalConfig.brokerPort));
+        DefaultExternalServerBuilder builder = DefaultExternalServer.newBuilder(externalPort).externalJoinEnum(joinEnum).brokerAddress(new BrokerAddress("127.0.0.1", IoGameGlobalConfig.brokerPort));
         return builder.build();
     }
 

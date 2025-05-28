@@ -58,8 +58,10 @@ public final class DefaultExternalCore implements ExternalCore {
 
     @Override
     public MicroBootstrap createMicroBootstrap() {
+        log.info("校验参数");
         check();
 
+        log.info("初始化默认配置");
         defaultSetting();
 
         final int externalCorePort = this.setting.getExternalCorePort();
@@ -75,6 +77,7 @@ public final class DefaultExternalCore implements ExternalCore {
                     , setting.getExternalJoinEnum().getName());
         }
 
+        log.info("111 玩家上下线的钩子函数");
         aware();
 
         // 此服务器是和真实用户连接的
@@ -87,10 +90,12 @@ public final class DefaultExternalCore implements ExternalCore {
     private void check() {
 
         int externalCorePort = setting.getExternalCorePort();
+        log.info("111 检查 端口配置 {}", externalCorePort);
         if (externalCorePort <= 0) {
             ThrowKit.ofIllegalArgumentException("The externalServer port must be >0 " + externalCorePort);
         }
 
+        log.info("111 检查 连接方式配置 {}", setting.getExternalJoinEnum());
         Objects.requireNonNull(setting.getExternalJoinEnum()
                 , "Please set a ExternalJoinEnum:" + Arrays.toString(ExternalJoinEnum.values()));
     }
