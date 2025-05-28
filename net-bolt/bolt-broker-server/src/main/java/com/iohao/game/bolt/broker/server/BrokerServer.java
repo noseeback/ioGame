@@ -69,13 +69,21 @@ public class BrokerServer implements GroupWith {
      * </pre>
      */
     String brokerId;
-    /** broker 端口（游戏网关端口） */
+    /**
+     * broker 端口（游戏网关端口）
+     */
     int port;
-    /** rpc server */
+    /**
+     * rpc server
+     */
     RpcServer rpcServer;
-    /** broker （游戏网关）的启动模式，默认单机模式 */
+    /**
+     * broker （游戏网关）的启动模式，默认单机模式
+     */
     BrokerRunModeEnum brokerRunMode;
-    /** 集群管理器 */
+    /**
+     * 集群管理器
+     */
     BrokerClusterManager brokerClusterManager;
 
     BrokerClientModules brokerClientModules;
@@ -91,20 +99,31 @@ public class BrokerServer implements GroupWith {
 
     @Deprecated
     public void startup() {
+        log.info("000 开始启动server");
         IoGameBanner.me().init();
 
+        log.info("000 设置系统属性 {}", RpcConfigs.DISPATCH_MSG_LIST_IN_DEFAULT_EXECUTOR);
         // #100
         System.setProperty(RpcConfigs.DISPATCH_MSG_LIST_IN_DEFAULT_EXECUTOR, "false");
 
+        log.info("000 sofa bolt rpcServer 启动");
         // 启动 bolt rpc
         this.rpcServer.startup();
 
         // 启动集群
-        Optional.ofNullable(this.brokerClusterManager).ifPresent(BrokerClusterManager::start);
+//        Optional.ofNullable(this.brokerClusterManager).ifPresent(BrokerClusterManager::start);
+        if (this.brokerClusterManager != null) {
+            log.info("000 启动 broker 集群管理器");
+            this.brokerClusterManager.start();
+        }
 
+        log.info("000 打印启动相关日志");
         extractedLog();
 
+        log.info("000 打印一些系统日志");
         IoGameBanner.render();
+
+        log.info("000 并发控制结束");
         IoGameBanner.me().countDown();
     }
 
@@ -122,6 +141,7 @@ public class BrokerServer implements GroupWith {
     }
 
     public static BrokerServerBuilder newBuilder() {
+        log.info("000 生成 BrokerServerBuilder 对象");
         return new BrokerServerBuilder();
     }
 

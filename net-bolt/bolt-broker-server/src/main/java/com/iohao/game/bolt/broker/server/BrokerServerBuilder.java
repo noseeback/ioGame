@@ -44,6 +44,7 @@ import lombok.AccessLevel;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.jctools.maps.NonBlockingHashMap;
 
 import java.util.*;
@@ -59,6 +60,7 @@ import java.util.function.Supplier;
  * @author 渔民小镇
  * @date 2022-05-15
  */
+@Slf4j
 @Accessors(fluent = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BrokerServerBuilder implements AwareInject {
@@ -90,8 +92,14 @@ public class BrokerServerBuilder implements AwareInject {
     /**
      * broker 端口（游戏网关端口）
      */
-    @Setter
     int port = IoGameGlobalConfig.brokerPort;
+
+    public BrokerServerBuilder port(int port) {
+        log.info("000 设置端口 port={}", port);
+        this.port = port;
+        return this;
+    }
+
     /**
      * broker （游戏网关）的启动模式，默认单机模式
      */
@@ -110,7 +118,9 @@ public class BrokerServerBuilder implements AwareInject {
 
     BrokerServerBuilder() {
         // 初始化一些处理器，如果开发者觉得默认的这些处理器没用，可以选择清除后，在添加自定义的。 this.clearProcessor
+        log.info("000 添加一些预制的处理器和连接器");
         this.defaultProcessor();
+        log.info("000 添加系统属性");
         // 开启 bolt 重连, 通过系统属性来开和关，如果一个进程有多个 RpcClient，则同时生效
         System.setProperty(Configs.CONN_MONITOR_SWITCH, "true");
         System.setProperty(Configs.CONN_RECONNECT_SWITCH, "true");
@@ -123,29 +133,37 @@ public class BrokerServerBuilder implements AwareInject {
      */
     @Deprecated
     public BrokerServer build() {
+        log.info("000 开始builder构建");
 
         this.checked();
 
+        log.info("000 检查 brokerId:{}", this.brokerId);
         if (Objects.isNull(this.brokerId)) {
             this.brokerId = UUID.randomUUID().toString();
+            log.info("000 设置 brokerId:{}", this.brokerId);
         }
 
+        log.info("000 配置负载均衡器");
         BalancedManager balancedManager = brokerServer.getBalancedManager();
         LogicBrokerClientLoadBalanced logicBalanced = balancedManager.getLogicBalanced();
         logicBalanced.setBrokerClientRegionFactory(this.brokerClientRegionFactory);
 
+        log.info("000 brokerServer 赋值 {}", brokerServer);
         brokerServer
                 .setBrokerId(this.brokerId)
                 .setBrokerRunMode(this.brokerRunMode)
                 .setPort(this.port)
                 .setBrokerClientModules(this.brokerClientModules)
         ;
+        log.info("000 brokerServer 赋值完成 {}", brokerServer);
 
+        log.info("000 初始化rpcServer 主要是设置端口");
         // 初始化 boltRpcServer
         brokerServer.initRpcServer();
 
         RpcServer rpcServer = brokerServer.getRpcServer();
 
+        log.info("000 注册添加用户处理器");
         // 注册用户处理器 添加到 bolt rpcServer 中
         this.processorList.forEach(processorSupplier -> {
 
@@ -156,6 +174,7 @@ public class BrokerServerBuilder implements AwareInject {
             rpcServer.registerUserProcessor(userProcessor);
         });
 
+        log.info("000 注册添加连接器");
         // 注册连接器 添加到 bolt rpcServer 中
         connectionEventProcessorMap.forEach((type, valueSupplier) -> {
 
@@ -166,6 +185,7 @@ public class BrokerServerBuilder implements AwareInject {
             rpcServer.addConnectionEventProcessor(type, processor);
         });
 
+        log.info("000 开始集群配置");
         // 集群相关
         this.cluster();
 
@@ -238,6 +258,7 @@ public class BrokerServerBuilder implements AwareInject {
     private void cluster() {
         // 单机模式，不做处理
         if (this.brokerRunMode != BrokerRunModeEnum.CLUSTER) {
+            log.info("000 当前模式非集群，退出");
             return;
         }
 
@@ -251,10 +272,13 @@ public class BrokerServerBuilder implements AwareInject {
     }
 
     private void checked() {
+
+        log.info("000 开始检查 端口:{}", this.port);
         if (this.port <= 0) {
             ThrowKit.ofRuntimeException("port error!");
         }
 
+        log.info("000 检查运行模式:{}", this.brokerRunMode);
         if (Objects.isNull(this.brokerRunMode)) {
             ThrowKit.ofRuntimeException("brokerRunMode expected: " + Arrays.toString(BrokerRunModeEnum.values()));
         }
@@ -262,13 +286,14 @@ public class BrokerServerBuilder implements AwareInject {
 
     private void defaultProcessor() {
         // ============================注册连接器============================
+        log.info("000 添加一些预制的连接器");
         this.connectionEventProcessorMap.put(ConnectionEventType.EXCEPTION, ConnectionExceptionEventBrokerProcessor::new);
         this.connectionEventProcessorMap.put(ConnectionEventType.CONNECT_FAILED, ConnectionFailedEventBrokerProcessor::new);
         this.connectionEventProcessorMap.put(ConnectionEventType.CONNECT, ConnectionEventBrokerProcessor::new);
         this.connectionEventProcessorMap.put(ConnectionEventType.CLOSE, ConnectionCloseEventBrokerProcessor::new);
 
         // ============================注册用户处理器============================
-
+        log.info("000 添加一些预制的用户处理器");
         this.processorList.add(RegisterBrokerClientModuleMessageBrokerProcessor::new);
         this.processorList.add(RequestMessageBrokerProcessor::new);
         this.processorList.add(SettingUserIdMessageBrokerProcessor::new);
