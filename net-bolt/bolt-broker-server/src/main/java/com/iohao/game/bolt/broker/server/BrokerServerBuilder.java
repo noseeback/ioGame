@@ -269,50 +269,18 @@ public class BrokerServerBuilder implements AwareInject {
 
         // ============================注册用户处理器============================
 
-        // 处理 - 模块注册（逻辑服注册）
-        Supplier<UserProcessor<?>> registerSupplier = RegisterBrokerClientModuleMessageBrokerProcessor::new;
-
-        // 处理 - (接收真实用户的请求) 把对外服的请求转发到逻辑服
-        Supplier<UserProcessor<?>> externalMessageSupplier = RequestMessageBrokerProcessor::new;
-
-        // 处理 - 改变用户 id -- external server
-        Supplier<UserProcessor<?>> changeUserIdMessageSupplier = SettingUserIdMessageBrokerProcessor::new;
-
-        // 处理 - （响应真实用户的请求）把逻辑服的响应转发到对外服
-        Supplier<UserProcessor<?>> responseMessageSupplier = ResponseMessageBrokerProcessor::new;
-
-        // 处理 - 内部模块消息的转发
-        Supplier<UserProcessor<?>> innerModuleMessageSupplier = InnerModuleMessageBrokerProcessor::new;
-        // 处理 - 内部模块消息的转发
-        Supplier<UserProcessor<?>> innerModuleVoidMessageSupplier = InnerModuleVoidMessageBrokerProcessor::new;
-
-        // 处理 - 模块之间的访问，访问同类型的多个逻辑服
-        Supplier<UserProcessor<?>> innerModuleRequestCollectMessageSupplier = InnerModuleRequestCollectMessageBrokerProcessor::new;
-        // 处理 - 模块之间的访问，游戏逻辑服同时访问多个游戏对外服
-        Supplier<UserProcessor<?>> innerModuleRequestCollectExternalMessageSupplier = InnerModuleRequestCollectExternalMessageBrokerProcessor::new;
-
-        // 处理 - 把绑定消息转发到对外服
-        Supplier<UserProcessor<?>> endPointLogicServerMessageSupplier = EndPointLogicServerMessageBrokerProcessor::new;
-
-        // 处理 - 广播
-        Supplier<UserProcessor<?>> broadcastMessageSupplier = BroadcastMessageBrokerProcessor::new;
-        // 处理 - 顺序的广播
-        Supplier<UserProcessor<?>> broadcastOrderMessageSupplier = BroadcastOrderMessageBrokerProcessor::new;
-
-        Supplier<UserProcessor<?>> brokerClientItemConnectMessageSupplier = BrokerClientItemConnectMessageBrokerProcessor::new;
-
-        this.processorList.add(registerSupplier);
-        this.processorList.add(externalMessageSupplier);
-        this.processorList.add(changeUserIdMessageSupplier);
-        this.processorList.add(responseMessageSupplier);
-        this.processorList.add(innerModuleMessageSupplier);
-        this.processorList.add(innerModuleVoidMessageSupplier);
-        this.processorList.add(innerModuleRequestCollectMessageSupplier);
-        this.processorList.add(innerModuleRequestCollectExternalMessageSupplier);
-        this.processorList.add(broadcastMessageSupplier);
-        this.processorList.add(broadcastOrderMessageSupplier);
-        this.processorList.add(brokerClientItemConnectMessageSupplier);
-        this.processorList.add(endPointLogicServerMessageSupplier);
+        this.processorList.add(RegisterBrokerClientModuleMessageBrokerProcessor::new);
+        this.processorList.add(RequestMessageBrokerProcessor::new);
+        this.processorList.add(SettingUserIdMessageBrokerProcessor::new);
+        this.processorList.add(ResponseMessageBrokerProcessor::new);
+        this.processorList.add(InnerModuleMessageBrokerProcessor::new);
+        this.processorList.add(InnerModuleVoidMessageBrokerProcessor::new);
+        this.processorList.add(InnerModuleRequestCollectMessageBrokerProcessor::new);
+        this.processorList.add(InnerModuleRequestCollectExternalMessageBrokerProcessor::new);
+        this.processorList.add(BroadcastMessageBrokerProcessor::new);
+        this.processorList.add(BroadcastOrderMessageBrokerProcessor::new);
+        this.processorList.add(BrokerClientItemConnectMessageBrokerProcessor::new);
+        this.processorList.add(EndPointLogicServerMessageBrokerProcessor::new);
         // 处理 - 接收脉冲生产者-的脉冲信号
         this.processorList.add(PulseSignalRequestBrokerProcessor::new);
         // 处理 - 接收脉冲消费者-的脉冲信号
