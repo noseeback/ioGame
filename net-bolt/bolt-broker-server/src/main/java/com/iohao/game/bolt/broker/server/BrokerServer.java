@@ -52,7 +52,8 @@ import java.util.Optional;
 @Getter
 @Accessors(chain = true)
 @Setter(AccessLevel.PACKAGE)
-@Slf4j(topic = IoGameLogName.CommonStdout)
+//@Slf4j(topic = IoGameLogName.CommonStdout)
+@Slf4j
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BrokerServer implements GroupWith {
     final BalancedManager balancedManager = new BalancedManager(this);

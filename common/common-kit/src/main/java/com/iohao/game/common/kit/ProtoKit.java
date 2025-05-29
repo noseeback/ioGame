@@ -33,7 +33,8 @@ import java.util.Objects;
  * @date 2022-01-11
  */
 @UtilityClass
-@Slf4j(topic = IoGameLogName.CommonStdout)
+//@Slf4j(topic = IoGameLogName.CommonStdout)
+@Slf4j
 public class ProtoKit {
     /**
      * 将对象转为 pb 字节数组

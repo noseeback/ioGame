@@ -54,7 +54,8 @@ import java.util.concurrent.TimeUnit;
 @Setter
 @Accessors(chain = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Slf4j(topic = IoGameLogName.CommonStdout)
+//@Slf4j(topic = IoGameLogName.CommonStdout)
+@Slf4j
 public final class ClientRunOne {
     List<InputCommandRegion> inputCommandRegions;
     ClientUser clientUser;

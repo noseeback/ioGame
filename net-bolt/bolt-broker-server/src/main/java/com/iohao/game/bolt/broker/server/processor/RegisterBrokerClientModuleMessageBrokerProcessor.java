@@ -53,7 +53,8 @@ import java.util.stream.Collectors;
  * @date 2022-05-14
  */
 @Setter
-@Slf4j(topic = IoGameLogName.CommonStdout)
+//@Slf4j(topic = IoGameLogName.CommonStdout)
+@Slf4j
 public final class RegisterBrokerClientModuleMessageBrokerProcessor extends AsyncUserProcessor<BrokerClientModuleMessage>
         implements BrokerServerAware, BrokerClientModulesAware, CmdRegionsAware {
 

@@ -29,7 +29,8 @@ import lombok.extern.slf4j.Slf4j;
  * @date 2023-01-19
  */
 @UtilityClass
-@Slf4j(topic = IoGameLogName.CommonStdout)
+//@Slf4j(topic = IoGameLogName.CommonStdout)
+@Slf4j
 class InternalSystemPropsKit {
 
     /**

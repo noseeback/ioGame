@@ -29,7 +29,8 @@ import lombok.extern.slf4j.Slf4j;
  * @date 2023-01-18
  */
 @UtilityClass
-@Slf4j(topic = IoGameLogName.CommonStdout)
+//@Slf4j(topic = IoGameLogName.CommonStdout)
+@Slf4j
 public class HessianKit {
     final HessianSerializer hessianSerializer = new HessianSerializer();
 

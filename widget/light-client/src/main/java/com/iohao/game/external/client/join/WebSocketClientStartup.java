@@ -40,7 +40,8 @@ import java.util.Objects;
  * @author 渔民小镇
  * @date 2023-07-04
  */
-@Slf4j(topic = IoGameLogName.CommonStdout)
+//@Slf4j(topic = IoGameLogName.CommonStdout)
+@Slf4j
 class WebSocketClientStartup implements ClientConnect {
     @Override
     public void connect(ClientConnectOption option) {

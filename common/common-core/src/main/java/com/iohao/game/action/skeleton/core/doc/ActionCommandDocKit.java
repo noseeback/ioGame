@@ -41,7 +41,8 @@ import java.util.function.Function;
  * @date 2022-01-28
  */
 @UtilityClass
-@Slf4j(topic = IoGameLogName.CommonStdout)
+//@Slf4j(topic = IoGameLogName.CommonStdout)
+@Slf4j
 public class ActionCommandDocKit {
     @Setter
     Function<URL, String> sourceFilePathFun = resourceUrl -> {

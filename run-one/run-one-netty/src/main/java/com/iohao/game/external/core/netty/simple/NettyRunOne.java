@@ -50,7 +50,8 @@ import java.util.Objects;
 @Setter
 @Accessors(chain = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Slf4j(topic = IoGameLogName.CommonStdout)
+//@Slf4j(topic = IoGameLogName.CommonStdout)
+@Slf4j
 public final class NettyRunOne {
     @Getter(AccessLevel.PRIVATE)
     final InternalRunOne runOne = new InternalRunOne();

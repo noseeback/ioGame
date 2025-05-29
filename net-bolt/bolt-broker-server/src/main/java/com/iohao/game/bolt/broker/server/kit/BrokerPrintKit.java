@@ -34,7 +34,8 @@ import java.util.stream.Collectors;
  * @date 2022-05-12
  */
 @UtilityClass
-@Slf4j(topic = IoGameLogName.CommonStdout)
+//@Slf4j(topic = IoGameLogName.CommonStdout)
+@Slf4j
 public class BrokerPrintKit {
     public void print(BrokerServer brokerServer) {
         if (!IoGameGlobalConfig.openLog) {

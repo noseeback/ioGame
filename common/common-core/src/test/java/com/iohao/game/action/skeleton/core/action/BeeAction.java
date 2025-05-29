@@ -29,7 +29,8 @@ import com.iohao.game.action.skeleton.core.action.pojo.DogValid;
 import com.iohao.game.common.consts.IoGameLogName;
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j(topic = IoGameLogName.CommonStdout)
+//@Slf4j(topic = IoGameLogName.CommonStdout)
+@Slf4j
 @ActionController(ExampleActionCmd.BeeActionCmd.cmd)
 public class BeeAction {
     /**

@@ -34,7 +34,8 @@ import static com.iohao.game.action.skeleton.core.action.ExampleActionCmd.Wrappe
  * @author 渔民小镇
  * @date 2022-06-26
  */
-@Slf4j(topic = IoGameLogName.CommonStdout)
+//@Slf4j(topic = IoGameLogName.CommonStdout)
+@Slf4j
 @ActionController(WrapperIntActionCmd.cmd)
 public class WrapperIntAction {
     @ActionMethod(WrapperIntActionCmd.intValue2Void)

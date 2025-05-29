@@ -48,7 +48,8 @@ import java.util.Objects;
  * @author 渔民小镇
  * @date 2023-02-19
  */
-@Slf4j(topic = IoGameLogName.CommonStdout)
+//@Slf4j(topic = IoGameLogName.CommonStdout)
+@Slf4j
 public final class DefaultExternalCore implements ExternalCore {
     final DefaultExternalCoreSetting setting;
 

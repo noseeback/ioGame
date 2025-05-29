@@ -37,7 +37,8 @@ import java.net.InetSocketAddress;
  * @author 渔民小镇
  * @date 2023-07-05
  */
-@Slf4j(topic = IoGameLogName.CommonStdout)
+//@Slf4j(topic = IoGameLogName.CommonStdout)
+@Slf4j
 class TcpClientStartup implements ClientConnect {
     static int PACKAGE_MAX_SIZE = 1024 * 1024;
 

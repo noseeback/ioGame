@@ -45,7 +45,8 @@ import lombok.extern.slf4j.Slf4j;
  * @author 渔民小镇
  * @date 2022-05-14
  */
-@Slf4j(topic = IoGameLogName.CommonStdout)
+//@Slf4j(topic = IoGameLogName.CommonStdout)
+@Slf4j
 public class RequestMessageClientProcessor extends AbstractAsyncUserProcessor<RequestMessage>
         implements BrokerClientAware, UserProcessorExecutorSelectorAware {
     BrokerClient brokerClient;

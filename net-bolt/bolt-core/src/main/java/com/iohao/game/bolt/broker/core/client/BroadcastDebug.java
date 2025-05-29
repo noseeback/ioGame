@@ -45,7 +45,8 @@ import java.util.Objects;
  * @date 2022-05-19
  */
 @UtilityClass
-@Slf4j(topic = IoGameLogName.CommonStdout)
+//@Slf4j(topic = IoGameLogName.CommonStdout)
+@Slf4j
 class BroadcastDebug {
     final Map<String, Class<?>> classMap = new NonBlockingHashMap<>();
 

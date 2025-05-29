@@ -38,7 +38,8 @@ import java.util.jar.JarFile;
  * @author 渔民小镇
  * @date 2021-12-12
  */
-@Slf4j(topic = IoGameLogName.CommonStdout)
+//@Slf4j(topic = IoGameLogName.CommonStdout)
+@Slf4j
 public class ClassScanner {
     /** 需要扫描的包名 */
     final String packagePath;
